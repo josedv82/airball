@@ -20,4 +20,5 @@ Imports:
     zoo,
     ggthemes
 RoxygenNote: 7.1.1
-
+URL: https://github.com/josedv82/airball
+BugReports: https://github.com/josedv82/airball/issues
