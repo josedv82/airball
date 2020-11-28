@@ -72,6 +72,32 @@ It returns a data frame with multiple travel metrics including:
 * origin and destination city coordinates
 * etc
 
+### Player Metrics:
+
+To get travel and schedule metrics at a player level use:
+
+```{r}
+
+nba_player_travel(season = 2018,
+                  return_home = 4,
+                  team = "Cleveland Cavaliers",
+                  player = "Jose Calderon")
+
+```
+
+It works like `nba_travel()` but it adds one more argument (player). Users can set it to one player, a vector of players or leave blank, in which case it defaults to all players in the selected query. 
+
+It returns the same metrics as the previous function and adds individidual factors such as
+
+* individual rest
+* individual games played
+* minutes played
+* several common individual game stats (points, rebounds, assists, turn overs, etc).
+
+
+
+
+
 
 
 
