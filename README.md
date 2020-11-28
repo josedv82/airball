@@ -44,7 +44,7 @@ Before explaining those two functions, I'd like to credit Alex Bresler and his p
 
 To get travel and schedule metrics:
 
-```{r}
+```
 nba_travel(season = 2017,
            team = c("Los Angeles Lakers", "Boston Celtics"),
            return_home = 3,
