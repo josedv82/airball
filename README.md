@@ -93,6 +93,9 @@ It returns the same metrics as the previous function and adds individidual facto
 * individual games played
 * minutes played
 * several common individual game stats (points, rebounds, assists, turn overs, etc).
+  
+  
+`*The first season available for both of the above functions is 1947.*`
 
 
 ### Flight Paths Plot
@@ -133,7 +136,38 @@ nba_travel_plot(data = datos,
 There are several common ggplot arguments users can customized to achieved the desired look as well as the ability to further customise the image outside of the function as a normal ggplot object.
 
 
+### Arbitrary Density Indicators
 
+The last function currently implemented is `nba_density()`. This function accepts the result of `nba_travel()` and returns a data frame with various common arbitrary game density descriptors.
+
+```{r}
+datos <- nba_travel()
+nba_density(df = datos)
+```
+
+It works at a team level and besides season, phase, date, team, location and 'W/L' it returns the following columns:
+
+* **B2B**: Yes if the game is part of a back to back series.
+* **B2B-1st**: Yes if the game is the first game of a back to back.
+* **B2B-2nd**: Yes if the game is the second game of a back to back.
+* **3in4**: Yes if the game is the 3rd game played in four days.
+* **4in5**: Yes if the game is the 4th game played in five days.
+* **5in7**: Yes if the game is the 5th game played in seven days.
+
+
+## Future Development
+
+**{airball}** is currently under development and it may changed over time.
+
+## Acknowledgment
+
+As mentioned above, I'd like to thank Alex Bresler and his package [{nbastatR}](https://github.com/abresler/nbastatR) which I have used to query NBA schedule and box scores from the NBA stats website. 
+
+I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several game density factors.
+
+## Disclaimer
+
+Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams. 
 
 
 
