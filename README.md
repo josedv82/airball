@@ -104,7 +104,7 @@ To plot the estimated flight paths for the selected season and team(s) use `nba_
 
 ```{r}
 
-#example with 2 teams
+#example with just 2 teams
 
 datos <- nba_travel(season = 2015:2018)
 nba_travel_plot(data = datos,
@@ -123,7 +123,7 @@ nba_travel_plot(data = datos,
 
 ```{r}
 
-#example with all 3 teams
+#example with all 30 teams
 
 nba_travel_plot(data = datos,
                 season = 2017,
