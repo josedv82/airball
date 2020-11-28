@@ -157,7 +157,7 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 
 ## Future Development
 
-**{airball}** is currently under development and it may changed over time.
+**{airball}** is currently under development and it may change over time.
 
 ## Acknowledgment
 
@@ -168,9 +168,3 @@ I have also used his package previously [here](https://josedv.shinyapps.io/NBASc
 ## Disclaimer
 
 Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams. 
-
-
-
-
-
-**under development...more info soon
