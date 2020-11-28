@@ -3,7 +3,7 @@
   <!-- badges: end -->
 
 # {airball}
-An R package to extract common NBA schedule & travel metrics for for modeling purposes.
+An R package to extract common NBA schedule & travel metrics for modeling purposes.
 
 <img src="man/airballlogo.PNG" align="right" width="300" />
 
