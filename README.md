@@ -137,7 +137,7 @@ nba_travel_plot(data = datos,
 
 <img src="man/plot1.png" width="800" />
 
-There are several common ggplot arguments users can customized to achieved the desired look as well as the ability to further customise the image outside of the function as a normal ggplot object.
+There are several common ggplot arguments users can customise to achieve the desired look as well as the ability to further work with the image outside of the function as it is just a ggplot object.
 
 
 ### Arbitrary Density Indicators
