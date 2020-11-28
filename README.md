@@ -167,8 +167,8 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 
 As mentioned above, I'd like to thank Alex Bresler and his package [{nbastatR}](https://github.com/abresler/nbastatR) which I have used to query NBA schedule and box scores from the NBA stats website. 
 
-I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several game density factors.
+I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several NBA game density factors.
 
 ## Disclaimer
 
-Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams. 
+Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams.
