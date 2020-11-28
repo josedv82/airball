@@ -60,5 +60,19 @@ The `nba_travel()` function accepts 5 arguments:
 * **phase**: The phase of the season to download. *RS* for regular season, *PO* for playoffs or *c("RS", "PO")* for both. It defaults to both if not set.
 * **flight_speed**: Users can set an average flight speed. This parameter is used to calculate estimated flight duration. It defaults to 450 (mph) if not set.
 
+It returns a data frame with multiple travel metrics including: 
+
+* distance, 
+* route, 
+* rest days, 
+* time zone, 
+* time zone change (shift), 
+* estimate flight duration, * direction of travel, 
+* whether it is a return home flight 
+* origin and destination city coordinates
+* etc
+
+
+
 
 **under development...more info soon
