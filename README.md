@@ -95,6 +95,43 @@ It returns the same metrics as the previous function and adds individidual facto
 * several common individual game stats (points, rebounds, assists, turn overs, etc).
 
 
+### Flight Paths Plot
+
+To plot the estimated flight paths for the selected season and team(s) use `nba_travel_plot()`. This function accepts the result of `nba_travel()` and returns a ggplot object that can be further customized by the user.
+
+```{r}
+
+datos <- nba_travel(season = 2015:2018)
+nba_travel_plot(data = datos,
+                season = 2017,
+                team = c("Chicago Bulls", "Miami Heat"),
+                city_color = "white",
+                plot_background_fill = "black",
+                land_color = "gray",
+                caption_color = "lightblue",
+                ncolumns = 1)
+
+```
+
+
+
+
+```{r}
+
+nba_travel_plot(data = datos,
+                season = 2017,
+                city_color = "white",
+                plot_background_fill = "black",
+                land_color = "gray",
+                caption_color = "lightblue")
+
+
+```
+
+
+There are several common. ggplot arguments users can customized to achieved the desired look as well as the ability to further customise the image outside of the function as a normal ggplot object.
+
+
 
 
 
