@@ -33,7 +33,12 @@ devtools::install_github("josedv82/airball")
 
 ### To extract metrics for NBA teams and players:
 
-There are currently two functions to help extract travel and schedule related metrics for NBA teams and players. It is important to highlight and credit Alex Bresler and his package [**{nbastatR}**](https://github.com/abresler/nbastatR) as I rely on his function [`game_logs()`](https://rdrr.io/github/abresler/nbastatR/man/game_logs.html) to query NBA schedule data from the [NBA Stats](https://www.nba.com/stats/players/boxscores/) website.
+There are currently two functions to help extract travel and schedule related metrics for NBA teams and players. 
+
+* `nba_travel()`
+* `nba_player_travel()`
+
+It is important to highlight and credit Alex Bresler and his package [**{nbastatR}**](https://github.com/abresler/nbastatR) as I relied on his function [`game_logs()`](https://rdrr.io/github/abresler/nbastatR/man/game_logs.html) to query NBA schedule data from the [NBA Stats](https://www.nba.com/stats/players/boxscores/) website and compute travel related metric on top of the queried schedule data.
 
 ### Team Metrics:
 
