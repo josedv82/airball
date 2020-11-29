@@ -7,7 +7,7 @@
 # {airball}
 An R package to extract common NBA schedule & travel metrics for modeling purposes.
 
-<img src="man/airballlogo.PNG" align="right" width="300" />
+<img src="man/images/airballlogo.PNG" align="right" width="300" />
 
 ***
 
@@ -120,7 +120,7 @@ nba_travel_plot(data = datos,
 
 ```
 
-<img src="man/plot2.png" width="800" />
+<img src="man/images/plot2.png" width="800" />
 
 
 ```{r}
@@ -137,7 +137,7 @@ nba_travel_plot(data = datos,
 
 ```
 
-<img src="man/plot1.png" width="800" />
+<img src="man/images/plot1.png" width="800" />
 
 There are several common ggplot arguments users can customise to achieve the desired look as well as the ability to further work with the image outside of the function as it is just a ggplot object.
 
