@@ -1,7 +1,7 @@
  <!-- badges: start -->
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
   ![](https://img.shields.io/github/downloads/josedv82/airball/total)
-  
+  ![](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fjosedv82%2Fairball%2Fblob%2Fmaster%2FREADME.md)
   <!-- badges: end -->
 
 # {airball}
