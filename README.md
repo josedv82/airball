@@ -116,7 +116,7 @@ nba_travel_plot(data = datos,
                 plot_background_fill = "black",
                 land_color = "gray",
                 caption_color = "lightblue",
-                ncolumns = 1)
+                ncolumns = 2)
 
 ```
 
