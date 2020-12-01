@@ -1,7 +1,6 @@
  <!-- badges: start -->
   [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
   [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-  ![](https://img.shields.io/github/downloads/josedv82/airball/total)
   <!-- badges: end -->
 
 # {airball}
