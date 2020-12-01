@@ -68,7 +68,8 @@ It returns a data frame with multiple travel metrics including:
 * rest days, 
 * time zone, 
 * time zone change (shift), 
-* estimate flight duration, * direction of travel, 
+* estimate flight duration, 
+* direction of travel, 
 * whether it is a return home flight 
 * origin and destination city coordinates
 * etc
@@ -110,7 +111,7 @@ To plot the estimated flight paths for the selected season and team(s) use `nba_
 datos <- nba_travel(season = 2015:2018)
 nba_travel_plot(data = datos,
                 season = 2017,
-                team = c("Chicago Bulls", "Miami Heat"),
+                team = c("Boston Celtics", "Miami Heat"),
                 city_color = "white",
                 plot_background_fill = "black",
                 land_color = "gray",
