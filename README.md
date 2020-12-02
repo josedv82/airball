@@ -141,6 +141,42 @@ nba_travel_plot(data = datos,
 
 There are several common ggplot arguments users can customise to achieve the desired look as well as the ability to further work with the image outside of the function as it is just a ggplot object.
 
+## Interactive 3D Flight Plots
+
+Although outside of the scope of this package, it is worth mentioning that users can combine the results of `nba_travel()` with the plotting capabilities of [{echarts4r}](https://echarts4r.john-coene.com/) to create dynamic 3D plots of the flight paths with just a few lines of code. 
+
+Below is an example of how to do this:
+
+```
+library(echarts4r)
+library(echarts4r.assets)
+library(airball)
+
+
+data <- nba_travel(season = 2019, team = "Boston Celtics")
+
+data %>% 
+  filter(Route != "No Travel") %>%
+  
+  e_charts() %>% 
+  e_globe(
+    environment = ea_asset("starfield"),
+    base_texture = ea_asset("world"), 
+    height_texture = ea_asset("world"),
+    displacementScale = 0.05
+  ) %>% 
+  e_lines_3d(
+    Longitude, 
+    Latitude, 
+    d.Longitude, 
+    d.Latitude,
+    name = "flights",
+    effect = list(show = TRUE)
+  ) %>% 
+  e_legend(FALSE)
+
+```
+<img src="man/images/globe.gif" width="800" />
 
 ### Arbitrary Density Indicators
 
