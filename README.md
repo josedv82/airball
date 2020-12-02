@@ -10,7 +10,7 @@ An R package to extract common NBA schedule & travel metrics for modeling purpos
 
 ***
 
-## Intro
+## 1) Intro
 
 The impact of schedule density and fixture congestion on team performance and injury risk is frequently discussed in various different sports and leagues around the world. **{airball}** provides a set of functions to quickly compute common schedule and travel related metrics from publicly available resources, both at a team and individual player level.
 
@@ -18,7 +18,7 @@ The motivation behind this package is to provide practitioners wishing to model 
 
 **{airball}** is currently under development and only provides information for NBA teams. The goal is to expand to other leagues and sports over time.
 
-## Installation
+## 2) Installation
 
 ```{r}
 #Install from CRAN 
@@ -30,7 +30,7 @@ install.packages("devtools")
 devtools::install_github("josedv82/airball")
 ```
 
-## Usage
+## 3) Usage
 
 ### To extract metrics for NBA teams and players:
 
@@ -41,7 +41,7 @@ There are currently two functions to help extract travel and schedule related me
 
 Before explaining those two functions, I'd like to credit Alex Bresler and his package [**{nbastatR}**](https://github.com/abresler/nbastatR) as I have embedded one of the functions he wrote [`game_logs()`](https://rdrr.io/github/abresler/nbastatR/man/game_logs.html) within my code to query NBA schedule data from the [NBA Stats](https://www.nba.com/stats/players/boxscores/) website.
 
-### Team Metrics:
+### 4) Team Metrics:
 
 To get travel and schedule metrics:
 
@@ -74,7 +74,7 @@ It returns a data frame with multiple travel metrics including:
 * origin and destination city coordinates
 * etc
 
-### Player Metrics:
+### 5) Player Metrics:
 
 To get travel and schedule metrics at a player level use:
 
@@ -100,7 +100,7 @@ It returns the same metrics as the previous function and adds individidual facto
 `*The first season available for both of the above functions is 1947.*`
 
 
-### Flight Paths Plot
+### 6) Flight Paths Plot
 
 To plot the estimated flight paths for the selected season and team(s) use `nba_travel_plot()`. This function accepts the result of `nba_travel()` and returns a ggplot object that can be further customized by the user.
 
@@ -141,7 +141,7 @@ nba_travel_plot(data = datos,
 
 There are several common ggplot arguments users can customise to achieve the desired look as well as the ability to further work with the image outside of the function as it is just a ggplot object.
 
-## Interactive 3D Flight Plots
+### 6.1) Interactive 3D Flight Plots
 
 Although outside of the scope of this package, it is worth mentioning that users can combine the results of `nba_travel()` with the plotting capabilities of [{echarts4r}](https://echarts4r.john-coene.com/) to create dynamic 3D plots of the flight paths with just a few lines of code. 
 
@@ -179,7 +179,7 @@ data %>%
 ```
 <img src="man/images/globe.gif" width="800" />
 
-### Arbitrary Density Indicators
+### 7) Arbitrary Density Indicators
 
 The last function currently implemented is `nba_density()`. This function accepts the result of `nba_travel()` and returns a data frame with various common arbitrary game density descriptors.
 
@@ -198,16 +198,16 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 * **5in7**: Yes if the game is the 5th game played in seven days.
 
 
-## Future Development
+## 8) Future Development
 
 **{airball}** is currently under development and it may change over time.
 
-## Acknowledgment
+## 9) Acknowledgment
 
 As mentioned above, I'd like to thank Alex Bresler and his package [{nbastatR}](https://github.com/abresler/nbastatR) which I have used to query NBA schedule and box scores from the NBA stats website. 
 
 I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several NBA game density factors.
 
-## Disclaimer
+## 10) Disclaimer
 
 Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams.
