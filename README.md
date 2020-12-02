@@ -151,6 +151,7 @@ Below is an example of how to do this:
 library(echarts4r)
 library(echarts4r.assets)
 library(airball)
+library(tidyverse)
 
 
 data <- nba_travel(season = 2019, team = "Boston Celtics")
