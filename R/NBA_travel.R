@@ -112,6 +112,8 @@ nba_travel <- function(season = 2018,
                                                                                                              ifelse(name == "Portland Trail", "Portland", name)))))))))))))) %>%
 
     dplyr::mutate(name = ifelse(Season == "2020-21" & Team == "Toronto Raptors" & Location == "H", "Tampa", name)) %>%
+    dplyr::mutate(name = ifelse(Season == "2020-21" & Opponent == "Toronto Raptors" & Location == "A", "Tampa", name)) %>%
+
     dplyr::full_join(cities, by = "name") %>%
     dplyr::mutate(off = paste(name, country.etc)) %>%
     dplyr::filter(off != "Dallas Canada" & off != "Houston Canada") %>%
