@@ -90,7 +90,7 @@ A ggplot object
 Plots the estimated flight paths for the selected season and team(s). It returns a ggplot object that can be further customized by the user.
 }
 \examples{
-datos <- nba_travel(season = 2015:2018)
+datos <- nba_travel(start_season = 2015, end_season = 2018)
 nba_travel_plot(data = datos,
                 season = 2017,
                 team = c("Chicago Bulls", "Miami Heat"),

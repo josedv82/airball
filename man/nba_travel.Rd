@@ -5,7 +5,8 @@
 \title{NBA Travel & Schedule related Metrics}
 \usage{
 nba_travel(
-  season = 2018,
+  start_season = 2018,
+  end_season = 2020,
   team = NULL,
   return_home = 20,
   phase = c("RS", "PO"),
@@ -13,7 +14,9 @@ nba_travel(
 )
 }
 \arguments{
-\item{season}{Numeric. The year of the season users wish to explore (i.e. 2018)}
+\item{start_season}{Numeric. The year of the first season users wish to explore (i.e. 2018)}
+
+\item{end_season}{Numeric. The year of the final season users wisth to explore (i.e. 2020)}
 
 \item{team}{Character String. The name of the team to be explored. If empty it defaults to all teams within the selected seasons.}
 
@@ -53,7 +56,8 @@ A data frame with the following columns:
 Returns a dataframe with computed travel and schedule metrics for NBA teams. It requires the game_logs() function from on the nbastatR package written by Bresler, A (2020) <https://github.com/abresler/nbastatR> to query season schedule information that is needed to calculate travel metrics.
 }
 \examples{
-nba_travel(season = 2017,
+nba_travel(start_season = 2017,
+           end_season = 2020,
            team = c("Los Angeles Lakers", "Boston Celtics"),
            return_home = 3,
            phase = "RS",
