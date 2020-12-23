@@ -48,7 +48,8 @@ Before explaining those two functions, I'd like to credit Alex Bresler and his p
 To get travel and schedule metrics:
 
 ```
-nba_travel(season = 2017,
+nba_travel(start_season = 2017,
+           end_season = 2020,
            team = c("Los Angeles Lakers", "Boston Celtics"),
            return_home = 3,
            phase = "RS",
@@ -82,7 +83,8 @@ To get travel and schedule metrics at a player level use:
 
 ```{r}
 
-nba_player_travel(season = 2018,
+nba_player_travel(start_season = 2018,
+                  end_season = 2020,
                   return_home = 4,
                   team = "Cleveland Cavaliers",
                   player = "Jose Calderon")
@@ -110,7 +112,7 @@ To plot the estimated flight paths for the selected season and team(s) use `nba_
 
 #example with just 2 teams
 
-datos <- nba_travel(season = 2015:2018)
+datos <- nba_travel(start_season = 2015, end_season = 2018)
 nba_travel_plot(data = datos,
                 season = 2017,
                 team = c("Boston Celtics", "Miami Heat"),
@@ -156,7 +158,7 @@ library(airball)
 library(tidyverse)
 
 
-data <- nba_travel(season = 2019, team = "Boston Celtics")
+data <- nba_travel(start_season = 2019, end_season = 2019, team = "Boston Celtics")
 
 data %>% 
   filter(Route != "No Travel") %>%
