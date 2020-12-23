@@ -16,9 +16,9 @@ The impact of schedule density and fixture congestion on team performance and in
 
 The motivation behind this package is to provide practitioners wishing to model schedule and travel data with tools to facilitate the extraction of several common metrics such as distance traveled, time zone changes, flight duration, routes, number of rest days, location coordinates, etc.  
 
-Currently, **{airball}** queries only past games. Meaning users can only request previous seasons or games that were already played during the current season.
+Currently, **{airball}** queries only past games. Meaning users can only request previous seasons or current season games that have already been played.
 
-The package is currently under development and only provides information for NBA teams. The goal is to expand to other leagues and sports over time.
+The package is currently under development and only provides information for NBA teams. The goal is to expand to more leagues over time.
 
 ## 2) Installation
 
