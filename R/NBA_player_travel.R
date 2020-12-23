@@ -2,7 +2,8 @@
 #'
 #' Returns a dataframe with computed travel and schedule metrics for NBA teams and each player of the team. It requires the game_logs() function from on the nbastatR package written by Bresler, A (2020) <https://github.com/abresler/nbastatR> to query season schedule information that is needed to calculate travel metrics.
 #'
-#' @param season Numeric. The year of the season users wish to explore (i.e. 2018)
+#' @param start_season Numeric. The year of the season users wish to explore (i.e. 2018)
+#' @param end_season Numeric. The year of the final season users wish to explore (i.e. 2020)
 #' @param team Character String. The name of the team to be explored. If empty it defaults to all teams within the selected seasons.
 #' @param player Character String. The name of the player to be explored. If empty it defaults to all players in the selected query.
 #' @param return_home Numeric. Users can set the number of days after which the team will return home between consecutive road games. It defaults to 20 if not indicated.
@@ -38,7 +39,8 @@
 #'
 #' @export
 #' @examples
-#' nba_player_travel(season = 2018,
+#' nba_player_travel(start_season = 2018,
+#'                   end_season = 2020,
 #'                   return_home = 4,
 #'                   team = "Cleveland Cavaliers",
 #'                   player = "Jose Calderon")
@@ -47,34 +49,74 @@
 #'
 
 
-nba_player_travel <- function(season = 2018,
+nba_player_travel <- function(start_season = 2018,
+                              end_season = 2020,
                               team = NULL,
                               player = NULL,
                               return_home = 20,
                               phase = c("RS", "PO"),
                               flight_speed = 450){
 
-  RS <- suppressWarnings(
-    nbastatR::game_logs(
-      seasons = season,
-      league = "NBA",
-      result_types = "player",
-      season_types = "Regular Season",
-      nest_data = F,
-      assign_to_environment = F,
-      return_message = F
-    )) %>% dplyr::mutate(Phase = "RS")
+  RS <- tryCatch({
 
-  PO <- suppressWarnings(
-    nbastatR::game_logs(
-      seasons = season,
-      league = "NBA",
-      result_types = "player",
-      season_types = "Playoffs",
-      nest_data = F,
-      assign_to_environment = F,
-      return_message = F
-    )) %>% dplyr::mutate(Phase = "PO")
+    suppressWarnings(
+      nbastatR::game_logs(
+        seasons = start_season:end_season,
+        league = "NBA",
+        result_types = "player",
+        season_types = "Regular Season",
+        nest_data = F,
+        assign_to_environment = F,
+        return_message = F
+      )) %>% dplyr::mutate(Phase = "RS")
+
+  }, error = function(cond){
+
+    suppressWarnings(
+      nbastatR::game_logs(
+        seasons = start_season:(end_season-1),
+        league = "NBA",
+        result_types = "player",
+        season_types = "Regular Season",
+        nest_data = F,
+        assign_to_environment = F,
+        return_message = F
+      )) %>% dplyr::mutate(Phase = "RS")
+
+  }
+
+  )
+
+
+  PO <- tryCatch({
+
+    suppressWarnings(
+      nbastatR::game_logs(
+        seasons = start_season:end_season,
+        league = "NBA",
+        result_types = "player",
+        season_types = "Playoffs",
+        nest_data = F,
+        assign_to_environment = F,
+        return_message = F
+      )) %>% dplyr::mutate(Phase = "PO")
+
+  }, error = function(cond){
+
+    suppressWarnings(
+      nbastatR::game_logs(
+        seasons = start_season:(end_season-1),
+        league = "NBA",
+        result_types = "player",
+        season_types = "Playoffs",
+        nest_data = F,
+        assign_to_environment = F,
+        return_message = F
+      )) %>% dplyr::mutate(Phase = "PO")
+
+  }
+
+  )
 
   statlogs <- rbind(RS, PO) %>% dplyr::arrange(dateGame)
 
