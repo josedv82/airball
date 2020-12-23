@@ -24,7 +24,7 @@ The package is currently under development and only provides information for NBA
 
 ```{r}
 #Install from CRAN 
-#Currently underdevelopment and not on CRAN
+#Not currently on CRAN
 
   
 #Install the development version from GitHub  
