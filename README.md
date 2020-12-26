@@ -103,6 +103,7 @@ It returns the same metrics as the previous function and adds individidual facto
 * minutes played
 * several common individual game stats (points, rebounds, assists, turn overs, etc).
   
+**Note:** This function does not return future games. It only returns up to the most recent played game, since it requires individual player game stats for it to work.
   
 `*The first season available for both of the above functions is 1947.*`
 
