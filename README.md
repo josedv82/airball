@@ -58,7 +58,8 @@ nba_travel(start_season = 2017,
 
 The `nba_travel()` function accepts 5 arguments:
 
-* **season**: A number or a vector of seasons for multiple seasons. For example `2002` or `c(2005:2008)`. If not set it defaults to 2018.
+* **start_season**: A number for the first season to explore. For example `2002`. If not set it defaults to 2018.
+* **end_season**: A number. The final season to explore. For example `2015`. If not set it defaults to `2018`
 * **team**: The name of the team to explore or a vector of teams for multiple teams. If not set it defaults to all teams in the selected season.
 * **return_home**: A number. Users can add a return home trip if two consecutive away games are separated by 'x' number of days. This helps improve the total mileage accuracy.
 * **phase**: The phase of the season to download. *RS* for regular season, *PO* for playoffs or *c("RS", "PO")* for both. It defaults to both if not set.
@@ -76,6 +77,8 @@ It returns a data frame with multiple travel metrics including:
 * whether it is a return home flight 
 * origin and destination city coordinates
 * etc
+
+**Note**: If you are pulling up to the current season (i.e. 2021). It will show future games that have ot been played yet. Allowing users to check future schedule metrics. If this is the case, it is recommended to pull the most recent season along with the previous to avoid problems. For example, set ```start_season = 2020``` and ```end_season = 2021```.  
 
 ### 5) Player Metrics:
 
