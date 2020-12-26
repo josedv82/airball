@@ -115,6 +115,63 @@ nba_travel <- function(start_season = 2018,
 
   )
 
+  ##
+
+  future_games <- function(year = 2021, month = "december"){
+
+    year <- year
+    month <- month
+    url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, "_games-", month, ".html")
+    webpage <- xml2::read_html(url)
+
+
+    col_names <- webpage %>%
+      rvest::html_nodes("table#schedule > thead > tr > th") %>%
+      rvest::html_attr("data-stat")
+    col_names <- c("game_id", col_names)
+
+
+    dates <- webpage %>%
+      rvest::html_nodes("table#schedule > tbody > tr > th") %>%
+      rvest::html_text()
+    dates <- dates[dates != "Playoffs"]
+
+    game_id <- webpage %>%
+      rvest::html_nodes("table#schedule > tbody > tr > th") %>%
+      rvest::html_attr("csk")
+    game_id <- game_id[!is.na(game_id)]
+
+
+    data <- webpage %>%
+      rvest::html_nodes("table#schedule > tbody > tr > td") %>%
+      rvest::html_text() %>%
+      matrix(ncol = length(col_names) - 2, byrow = TRUE)
+
+    month_df <- as.data.frame(cbind(game_id, dates, data), stringsAsFactors = FALSE) %>%
+      mutate(dates = lubridate::mdy(dates))
+    names(month_df) <- col_names
+
+    month_h <- month_df %>% dplyr::select(Date = date_game, Team = home_team_name, Opponent = visitor_team_name) %>% dplyr::mutate(Location = "H")
+    month_a <- month_df %>% dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>% dplyr::mutate(Location = "A")
+
+    future <- dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
+      dplyr::mutate(Season = "2020-21", `W/L` = "-", Phase = "RS")
+
+  }
+
+
+  dec <- future_games(year = 2021, month = "december")
+  jan <- future_games(year = 2021, month = "january")
+  feb <- future_games(year = 2021, month = "february")
+  mar <- future_games(year = 2021, month = "march")
+
+  future <- full_join(dec, jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    arrange(Team, Date) %>%
+    filter(Date >= Sys.Date())
+
+ ##
 
   statlogs <- rbind(RS, PO) %>% dplyr::arrange(dateGame)
 
@@ -287,7 +344,10 @@ nba_travel <- function(start_season = 2018,
     tidyr::fill(Phase, .direction = "up") %>%
     tidyr::fill(Phase, .direction = "down") %>%
     dplyr::mutate(`W/L` = ifelse(is.na(`W/L`), "-", `W/L`)) %>%
-    dplyr::filter(Phase %in% phase)
+    dplyr::filter(Phase %in% phase) %>%
+    dplyr::group_by(Season, Team) %>%
+    dplyr::mutate(Rem = ifelse(!is.na(lag(Date)) & lag(Date) == Date, "1", "")) %>%
+    dplyr::filter(Rem != "1") %>% dplyr::select(-Rem)
 
   if(missing(team)) return(final)
   else return(final %>% dplyr::filter(Team %in% team))
