@@ -148,7 +148,7 @@ nba_travel <- function(start_season = 2018,
       matrix(ncol = length(col_names) - 2, byrow = TRUE)
 
     month_df <- as.data.frame(cbind(game_id, dates, data), stringsAsFactors = FALSE) %>%
-      mutate(dates = lubridate::mdy(dates))
+      dplyr::mutate(dates = lubridate::mdy(dates))
     names(month_df) <- col_names
 
     month_h <- month_df %>% dplyr::select(Date = date_game, Team = home_team_name, Opponent = visitor_team_name) %>% dplyr::mutate(Location = "H")
@@ -165,11 +165,11 @@ nba_travel <- function(start_season = 2018,
   feb <- future_games(year = 2021, month = "february")
   mar <- future_games(year = 2021, month = "march")
 
-  future <- full_join(dec, jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    arrange(Team, Date) %>%
-    filter(Date >= Sys.Date())
+  future <- dplyr::full_join(dec, jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    dplyr::full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    dplyr::full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    dplyr::arrange(Team, Date) %>%
+    dplyr::filter(Date >= Sys.Date())
 
  ##
 
@@ -346,7 +346,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::mutate(`W/L` = ifelse(is.na(`W/L`), "-", `W/L`)) %>%
     dplyr::filter(Phase %in% phase) %>%
     dplyr::group_by(Season, Team) %>%
-    dplyr::mutate(Rem = ifelse(!is.na(lag(Date)) & lag(Date) == Date, "1", "")) %>%
+    dplyr::mutate(Rem = ifelse(!is.na(dplyr::lag(Date)) & dplyr::lag(Date) == Date, "1", "")) %>%
     dplyr::filter(Rem != "1") %>% dplyr::select(-Rem)
 
   if(missing(team)) return(final)

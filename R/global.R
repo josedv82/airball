@@ -105,4 +105,8 @@ utils::globalVariables(c("%>%",
                          "urlPlayerStats",
                          "urlPlayerThumbnail",
                          "urlTeamSeasonLogo",
-                         "yearSeason"))
+                         "yearSeason",
+                         "date_game",
+                         "home_team_name",
+                         "visitor_team_name",
+                         "Rem"))
