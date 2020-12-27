@@ -183,9 +183,20 @@ nba_travel <- function(start_season = 2018,
     dplyr::select(Season = slugSeason, Date = dateGame, TeamB = nameTeam, LocationB = locationGame, TE = slugOpponent, Opp = slugTeam) %>%
     dplyr::distinct()
 
-  cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
-    dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
-    dplyr::arrange(Team, Date)
+  if(end_season < 2021) {
+
+    cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
+      dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
+      dplyr::arrange(Team, Date)
+
+  } else {
+
+    cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
+      dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
+      dplyr::full_join(future, by = c("Season", "Date", "Team", "Opponent", "Location", "W/L", "Phase")) %>%
+      dplyr::arrange(Team, Date)
+
+  }
 
   cities <- maps::world.cities %>%
     dplyr::group_by(name, country.etc) %>%
