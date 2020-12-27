@@ -72,19 +72,25 @@ nba_travel_plot <- function(
   panel_background_fill = "transparent",
   ncolumns = 6){
 
+  #cleaning year format for filtering
   df <- data %>%
     dplyr::mutate(Year = sub('.*-', '', Season)) %>%
     dplyr::mutate(Year = as.numeric(Year)) %>%
     dplyr::mutate(Year = ifelse(Year <= 45, paste(20, Year, sep = ""), paste(19, Year, sep = ""))) %>%
     dplyr::mutate(Year = as.numeric(Year))
 
+  #conditioning return
+  
+  #if users do not select a team return all 30 teams
   if(missing(team))
     return(
 
+      #requires removing no travel games for plotting
       df %>%
         dplyr::filter(Distance > 0) %>%
         dplyr::filter(if (is.null(season)) Year == max(Year) else Year == season) %>%
 
+      #create plot
         ggplot2::ggplot() +
         ggplot2::geom_polygon(data = ggplot2::map_data("usa"), ggplot2::aes(x=long, y = lat, group = group), fill = land_color, alpha = land_alpha) +
         ggplot2::geom_curve(ggplot2::aes(x = d.Longitude, y = d.Latitude, xend = Longitude, yend = Latitude), curvature = 0.05, color = "#e8175d", size = 0.5) +
@@ -108,13 +114,16 @@ nba_travel_plot <- function(
 
     )
 
+    #else return only selected teams
   else return (
 
+    #requires removing no travel games for plotting + filter by selected team
     df %>%
       dplyr::filter(Distance > 0) %>%
       dplyr::filter(Team %in% team) %>%
       dplyr::filter(if (is.null(season)) Year == max(Year) else Year == season) %>%
 
+     #create plot
       ggplot2::ggplot() +
       ggplot2::geom_polygon(data = ggplot2::map_data("usa"), ggplot2::aes(x=long, y = lat, group = group), fill = land_color, alpha = land_alpha) +
       ggplot2::geom_curve(ggplot2::aes(x = d.Longitude, y = d.Latitude, xend = Longitude, yend = Latitude), curvature = 0.05, color = "#e8175d", size = 0.5) +
