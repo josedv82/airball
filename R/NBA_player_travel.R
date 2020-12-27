@@ -57,6 +57,7 @@ nba_player_travel <- function(start_season = 2018,
                               phase = c("RS", "PO"),
                               flight_speed = 450){
 
+  #pull regular season data / account for potential errors
   RS <- tryCatch({
 
     suppressWarnings(
@@ -88,6 +89,7 @@ nba_player_travel <- function(start_season = 2018,
   )
 
 
+  #plull play off data / account for potential errors
   PO <- tryCatch({
 
     suppressWarnings(
@@ -118,8 +120,10 @@ nba_player_travel <- function(start_season = 2018,
 
   )
 
+  #join RS + PO
   statlogs <- rbind(RS, PO) %>% dplyr::arrange(dateGame)
 
+  #needed cleaning for home and away games + rejoining after
   away <- statlogs %>%
     dplyr::select(Season = slugSeason, Date = dateGame, Team = nameTeam, Location = locationGame, Opp = slugOpponent, TE = slugTeam, `W/L` = outcomeGame, Phase) %>%
     dplyr::distinct()
@@ -132,6 +136,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
     dplyr::arrange(Team, Date)
 
+  #get city coordinate data
   cities <- maps::world.cities %>%
     dplyr::group_by(name, country.etc) %>%
     dplyr::filter(pop == max(pop)) %>%
@@ -140,6 +145,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::filter(pop == max(pop)) %>%
     dplyr::ungroup()
 
+  #cleaning needed to make sure cities can be extracted from team names
   cal1 <- cal %>%
     dplyr::mutate(Team = ifelse(Team == "LA Clippers", "Los Angeles Clippers", Team)) %>%
     dplyr::mutate(Opponent = ifelse(Opponent == "LA Clippers", "Los Angeles Clippers", Opponent)) %>%
@@ -157,10 +163,12 @@ nba_player_travel <- function(start_season = 2018,
                          ifelse(name == "Capital", "Washington",
                          ifelse(name == "New Orleans/Oklahoma City", "New Orleans",
                          ifelse(name == "Portland Trail", "Portland", name)))))))))))))) %>%
-
+   
+   #account for toronto home in 2021
     dplyr::mutate(name = ifelse(Season == "2020-21" & Team == "Toronto Raptors" & Location == "H", "Tampa", name)) %>%
     dplyr::mutate(name = ifelse(Season == "2020-21" & Opponent == "Toronto Raptors" & Location == "A", "Tampa", name)) %>%
 
+  #join city + schedule data
     dplyr::full_join(cities, by = "name") %>%
     dplyr::mutate(off = paste(name, country.etc)) %>%
     dplyr::filter(off != "Dallas Canada" & off != "Houston Canada") %>%
@@ -169,6 +177,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::group_by(Team, Season) %>%
     dplyr::mutate(destLat = dplyr::lag(lat), destLon = dplyr::lag(long))
 
+  #detect home coordinates
   calhome <- cal1 %>%
     dplyr::filter(Location == "H") %>%
     dplyr::ungroup() %>%
@@ -176,6 +185,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::distinct() %>%
     dplyr::select(Team, City, destLat1 = lat, destLon1 = long)
 
+  #join datasets + calculate rest metrics
   allcal <- dplyr::full_join(cal1, calhome, by = c("Team", "City")) %>%
     dplyr::group_by(Season, Team) %>%
     tidyr::fill(destLat1, .direction = "up") %>%
@@ -188,6 +198,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::mutate(Rest = ifelse(is.na(Rest), 15, Rest)) %>%
     dplyr::mutate(AB = paste(Location, dplyr::lag(Location)))
 
+  #complete date sequence
   miscal <-  allcal %>%
     dplyr::group_by(Season, Team) %>%
     tidyr::complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
@@ -196,8 +207,11 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::full_join(calhome, by = "Team") %>%
     dplyr::select(Season, Team, City, Date, lat = destLat1, long = destLon1)
 
+  #data manipulation
   cal_rest <- dplyr::full_join(allcal, miscal, by = c("Season", "Date", "Team", "City", "lat", "long")) %>%
     dplyr::arrange(Season, Team, Date) %>%
+  
+  #account for return home param
     dplyr::mutate(A_B = ifelse(Rest >= return_home & AB == "A A", "-", NA)) %>%
     dplyr::mutate(A_B = ifelse(dplyr::lead(A_B) == "-", "y", A_B)) %>%
     dplyr::filter(!is.na(Rest) | A_B == "y") %>%
@@ -208,12 +222,16 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::mutate(destLat = ifelse(!is.na(destLat1), destLat1, destLat),
                   destLon = ifelse(!is.na(destLon1), destLon1, destLon)) %>%
     dplyr::select(-AB, -A_B, -destLat1, -destLon1) %>%
+  
+   #account for games played during covid in orlando
     dplyr::mutate(City = ifelse(Date > "2020-07-01" & Date < "2020-11-01", "Orlando", City)) %>%
     dplyr::mutate(lat = ifelse(Date > "2020-07-01" & Date < "2020-11-01", 28.50, lat),
                   destLat = ifelse(Date > "2020-07-01" & Date < "2020-11-01", 28.50, destLat),
                   long = ifelse(Date > "2020-07-01" & Date < "2020-11-01", -81.37, long),
                   destLon = ifelse(Date > "2020-07-01" & Date < "2020-11-01", -81.37, destLon)) %>%
     dplyr::rowwise() %>%
+  
+   #calculate distances
     dplyr::mutate(dist = geosphere::distm(c(destLon, destLat), c(long, lat), fun = geosphere::distHaversine)) %>%
     dplyr::mutate(Distance = round(dist * 0.000621,0)) %>%
     dplyr::select(-dist) %>%
@@ -223,11 +241,13 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::select(Team, Citys = City) %>%
     dplyr::ungroup()
 
+  #get time zones
   TZs <- lutz::tz_list() %>%
     dplyr::select(TZ = tz_name, is_dst, utc_offset_h) %>%
     dplyr::filter(is_dst == FALSE) %>%
     dplyr::select(-is_dst)
 
+   #calculate time zone shifts for each game
   shift <- cal_rest %>% dplyr::full_join(home, by = "Team") %>%
     dplyr::group_by(Season, Team) %>%
     dplyr::mutate(lagcity = ifelse(is.na(dplyr::lag(City)), "-" , dplyr::lag(City))) %>%
@@ -244,7 +264,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::select(offset = utc_offset_h, everything()) %>%
     dplyr::ungroup()
 
-
+  #final dataset 
   final <- shift %>%
     dplyr::filter(Location == "Home") %>%
     dplyr::select(Team, City, TZ) %>%
@@ -277,16 +297,18 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::mutate(`W/L` = ifelse(is.na(`W/L`), "-", `W/L`)) %>%
     dplyr::filter(Phase %in% phase)
 
+  #conditional return whether or not user selects a specific team
   if(missing(team)) Team <- final
   else Team <- final %>% dplyr::filter(Team %in% team)
 
-
+  #add individual player stats
   statlogsplayer <- statlogs %>% dplyr::select(Season = slugSeason, Date = dateGame, Team = nameTeam, Player = namePlayer, `Player Rest` = countDaysRestPlayer, `Games Played` = numberGamePlayerSeason, MINs = minutes, PTS = pts, everything()) %>%
     dplyr::group_by(Player, Season) %>%
     dplyr::mutate(`Player Rest` = abs(as.numeric(dplyr::lag(Date) - Date) + 1)) %>%
     dplyr::mutate(`Player Rest` = ifelse(is.na(`Player Rest`), 15, `Player Rest`)) %>%
     dplyr::mutate(Team = ifelse(Team == "LA Clippers", "Los Angeles Clippers", Team))
 
+  #final cleaning after joining
   Players <- Team %>% dplyr::full_join(statlogsplayer, by = c("Season", "Date", "Team")) %>%
     dplyr::arrange(Date, Player) %>%
     dplyr:: select(Season, Phase = Phase.x, dplyr::everything(), -yearSeason, -slugLeague, -typeSeason, -idGame, -idTeam, isB2B, -isB2BFirst, -isB2BSecond, -locationGame, -slugMatchup, -slugTeam, -countDaysNextGameTeam, -slugOpponent, -slugTeamWinner, -slugTeamLoser, -outcomeGame, -countDaysNextGamePlayer, -idPlayer, -isWin, -hasVideo, -urlTeamSeasonLogo, -urlPlayerStats, -urlPlayerThumbnail, -urlPlayerHeadshot, -urlPlayerActionPhoto, -urlPlayerPhoto, -Phase.y, -isB2B, -numberGameTeamSeason, -countDaysRestTeam) %>%
@@ -297,6 +319,7 @@ nba_player_travel <- function(start_season = 2018,
     dplyr::select(-number) %>%
     dplyr::select(Season, Phase, Date, Team, Opponent, Location, City, `W/L`, Route, Distance, TZ, `Flight Time`, `Direction (E/W)`, `Return Home`, Player, `Team Rest` = Rest, `Player Rest`, `Games Played`, MINs, PTS, dplyr::everything())
 
+  #conditional return based on whether user selects a specific player or not
   if(missing(player)) return(Players)
   else return(Players %>% dplyr::filter(Player %in% player))
 
