@@ -30,6 +30,7 @@
 
 nba_density <- function(df){
 
+  #simple mutations to calculate arbitrary metrics using nba_travel() data
   final <- df %>%
     dplyr::select(Season, Phase, Date, Team, Opponent, `W/L`, Location) %>%
     dplyr::group_by(Season, Phase, Team) %>%
