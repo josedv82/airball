@@ -258,7 +258,7 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 * **4in5**: Yes if the game is the 4th game played in five days.
 * **5in7**: Yes if the game is the 5th game played in seven days.
 
-## 8) Injury List
+## 8) Injury Transactions
 
 To help explore how the schedule may impact injuries, we added the `nba_injuries()` function to get a list of injury transactions. The function enables querying start date, end date, players and/or individual teams. The data is extracted from [Pro Sport Transactions](https://www.prosportstransactions.com/). Please check this website for information on how the transactions are listed.
 
