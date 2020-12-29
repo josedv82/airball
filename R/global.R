@@ -109,4 +109,6 @@ utils::globalVariables(c("%>%",
                          "date_game",
                          "home_team_name",
                          "visitor_team_name",
-                         "Rem"))
+                         "Rem",
+                         "Acquired",
+                         "Relinquished"))
