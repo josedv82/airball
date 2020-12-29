@@ -345,7 +345,7 @@ A BibTeX entry for LaTeX users is
 
   @Manual{,
     title = {airball: Schedule & Travel Related Metrics in Basketball},
-    author = {{person} and email = "jose.fernandezdv@gmail.com")},
+    author = {{person} and email = "jose.fernandezdv at gmail.com")},
     note = {R package version 0.4.0},
     url = {https://github.com/josedv82/airball},
   }
