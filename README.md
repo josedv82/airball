@@ -52,6 +52,24 @@ nba_travel(start_season = 2017,
            return_home = 3,
            phase = "RS",
            flight_speed = 550)
+           
+           
+# A tibble: 640 x 22
+# Groups:   Season, Team [8]
+   Season Phase Month  Week Date       Team  Opponent Location `W/L` City  Distance[,1] Route[,1]  Rest TZ   
+   <chr>  <chr> <chr> <dbl> <date>     <chr> <chr>    <chr>    <chr> <chr>        <dbl> <chr>     <dbl> <chr>
+ 1 2016-~ RS    Oct      43 2016-10-26 Bost~ Brookly~ Home     W     Bost~            0 No Travel    15 Amer~
+ 2 2016-~ RS    Oct      43 2016-10-27 Bost~ Chicago~ Away     L     Chic~          854 Boston -~     0 Amer~
+ 3 2016-~ RS    Oct      44 2016-10-29 Bost~ Charlot~ Away     W     Char~          589 Chicago ~     1 Amer~
+ 4 2016-~ RS    Nov      44 2016-11-02 Bost~ Chicago~ Home     W     Bost~          722 Charlott~     3 Amer~
+ 5 2016-~ RS    Nov      44 2016-11-03 Bost~ Clevela~ Away     L     Clev~          551 Boston -~     0 Amer~
+ 6 2016-~ RS    Nov      45 2016-11-06 Bost~ Denver ~ Home     L     Bost~          551 Clevelan~     2 Amer~
+ 7 2016-~ RS    Nov      45 2016-11-09 Bost~ Washing~ Away     L     Wash~          394 Boston -~     2 Amer~
+ 8 2016-~ RS    Nov      46 2016-11-11 Bost~ New Yor~ Home     W     Bost~          394 Washingt~     1 Amer~
+ 9 2016-~ RS    Nov      46 2016-11-12 Bost~ Indiana~ Away     W     Indi~          807 Boston -~     0 Amer~
+10 2016-~ RS    Nov      46 2016-11-14 Bost~ New Orl~ Away     L     New ~          704 Indianap~     1 Amer~
+# ... with 630 more rows, and 8 more variables: `Shift (hrs)`[,1] <dbl>, `Flight Time` <chr>, `Direction (E/W)`[,1] <chr>,
+#   `Return Home` <chr>, Latitude <dbl>, Longitude <dbl>, d.Latitude <dbl>, d.Longitude <dbl>
 ```
 
 The `nba_travel()` function accepts 5 arguments:
