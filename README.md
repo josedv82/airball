@@ -89,6 +89,26 @@ nba_player_travel(start_season = 2018,
                   return_home = 4,
                   team = "Cleveland Cavaliers",
                   player = "Jose Calderon")
+                  
+
+# A tibble: 70 x 42
+# Groups:   Season, Player [1]
+   Season Phase Date       Team  Opponent Location City  `W/L` Route[,1] Distance[,1] TZ    `Flight Time` `Direction (E/W~
+   <chr>  <chr> <date>     <chr> <chr>    <chr>    <chr> <chr> <chr>            <dbl> <chr> <chr>         <chr>           
+ 1 2017-~ RS    2017-10-20 Clev~ Milwauk~ Away     Milw~ W     Clevelan~          340 Amer~ ~55 minutes   West            
+ 2 2017-~ RS    2017-10-21 Clev~ Orlando~ Home     Clev~ L     Milwauke~          340 Amer~ ~55 minutes   East            
+ 3 2017-~ RS    2017-10-25 Clev~ Brookly~ Away     New ~ L     Clevelan~          407 Amer~ ~55 minutes   -               
+ 4 2017-~ RS    2017-10-28 Clev~ New Orl~ Away     New ~ L     New York~         1158 Amer~ ~2.57 hours   West            
+ 5 2017-~ RS    2017-10-29 Clev~ New Yor~ Home     Clev~ L     New Orle~          913 Amer~ ~2.03 hours   East            
+ 6 2017-~ RS    2017-11-01 Clev~ Indiana~ Home     Clev~ L     No Travel            0 Amer~ -             -               
+ 7 2017-~ RS    2017-11-17 Clev~ Los Ang~ Home     Clev~ W     Charlott~          437 Amer~ ~58.27 minut~ -               
+ 8 2017-~ RS    2017-11-20 Clev~ Detroit~ Away     Detr~ W     Clevelan~           96 Amer~ ~55 minutes   -               
+ 9 2017-~ RS    2017-11-22 Clev~ Brookly~ Home     Clev~ W     Detroit ~           96 Amer~ ~55 minutes   -               
+10 2017-~ RS    2017-11-24 Clev~ Charlot~ Home     Clev~ W     No Travel            0 Amer~ -             -               
+# ... with 60 more rows, and 29 more variables: `Return Home` <chr>, Player <chr>, `Team Rest` <dbl>, `Player Rest` <dbl>,
+#   `Games Played` <int>, MINs <dbl>, PTS <dbl>, `Shift (hrs)`[,1] <dbl>, fgm <dbl>, fga <dbl>, pctFG <dbl>, fg3m <dbl>,
+#   fg3a <dbl>, pctFG3 <dbl>, pctFT <dbl>, fg2m <dbl>, fg2a <dbl>, pctFG2 <dbl>, ftm <dbl>, fta <dbl>, oreb <dbl>,
+#   dreb <dbl>, treb <dbl>, ast <dbl>, stl <dbl>, blk <dbl>, tov <dbl>, pf <dbl>, plusminus <dbl>
 
 ```
 
