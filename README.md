@@ -298,6 +298,31 @@ nba_injuries(start_date = "2012-01-01",
 
 If the parameters `player` or `team` are not indicated, it will return or players and teams within the selected dates. Note that for long queries (multiple years/teams) it may take a while.
 
+```{r}
+
+nba_injuries(start_date = "2014-01-01",
+             end_date = "2014-01-10")
+             
+
+# A tibble: 147 x 5
+   Date       Team      Acquired        Relinquished                       Notes                              
+   <date>     <chr>     <chr>           <chr>                              <chr>                              
+ 1 2014-01-01 Bobcats   ""              "Jeffery Taylor / Jeff Taylor (b)" torn right Achilles tendon (DNP)   
+ 2 2014-01-01 Clippers  ""              "Reggie Bullock"                   placed on IL                       
+ 3 2014-01-01 Clippers  "Maalik Wayns"  ""                                 activated from IL                  
+ 4 2014-01-01 Mavericks ""              "Wayne Ellington"                  illness (DNP)                      
+ 5 2014-01-01 Pelicans  "Eric Gordon"   ""                                 activated from IL                  
+ 6 2014-01-01 Blazers   "C.J. McCollum" ""                                 activated from IL                  
+ 7 2014-01-02 Bobcats   ""              "Jeffery Taylor / Jeff Taylor (b)" torn right Achilles tendon (DNP)   
+ 8 2014-01-02 Bucks     ""              "John Henson"                      sprained left ankle (DNP)          
+ 9 2014-01-02 Cavaliers ""              "Kyrie Irving"                     bruised left knee (DTD)            
+10 2014-01-02 Cavaliers ""              "Kyrie Irving"                     placed on IL with bruised left knee
+# ... with 137 more rows
+
+```
+
+
+
 ## 9) Future Development
 
 **{airball}** is currently under development and it may change over time.
