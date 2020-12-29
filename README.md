@@ -296,7 +296,7 @@ nba_injuries(start_date = "2012-01-01",
 
 ```
 
-If the parameters `player` or `team` are not indicated, it will return or players and teams within the selected dates. Note that for long queries (multiple years/teams) it may take a while.
+If the parameters `player` or `team` are not indicated, it will return all players and teams within the selected dates. Note that for long queries (multiple years/teams) it may take a while.
 
 ```{r}
 
