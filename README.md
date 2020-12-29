@@ -205,7 +205,7 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 
 ## 8) Injury List
 
-Users can use `nba_injuries()` to get a list of injury transactions. The function enables querying start date, end date, players and/or individual teams. The data is extracted from [Pro Sport Transactions](https://www.prosportstransactions.com/). Please check this website for information on how the transactions are listed.
+To help explore how the schedule may impact injuries, we added the `nba_injuries()` function to get a list of injury transactions. The function enables querying start date, end date, players and/or individual teams. The data is extracted from [Pro Sport Transactions](https://www.prosportstransactions.com/). Please check this website for information on how the transactions are listed.
 
 Example: 
 ```{r}
