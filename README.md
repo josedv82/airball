@@ -333,6 +333,19 @@ As mentioned above, I'd like to thank Alex Bresler and his package [{nbastatR}](
 
 I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several NBA game density factors.
 
-## 11) Disclaimer
+## 11) Citation
+
+Fernandez, J. (2020). airball: Schedule & Travel Related Metrics in Basketball. R package version 0.4.0. https://github.com/josedv82/airball
+
+A BibTeX entry for LaTeX users is
+
+  @Manual{,
+    title = {airball: Schedule & Travel Related Metrics in Basketball},
+    author = {{person} and email = "jose.fernandezdv@gmail.com")},
+    note = {R package version 0.4.0},
+    url = {https://github.com/josedv82/airball},
+  }
+
+## 12) Disclaimer
 
 Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams.
