@@ -192,6 +192,23 @@ The `nba_density()` function accepts the result of `nba_travel()` and returns a 
 ```{r}
 datos <- nba_travel()
 nba_density(df = datos)
+
+
+# A tibble: 7,532 x 13
+# Groups:   Season, Phase, Team [138]
+   Season  Phase Team          Date       Opponent            `W/L` Location B2B   `B2B-1st` `B2B-2nd` `3in4` `4in5` `5in7`
+   <chr>   <chr> <chr>         <date>     <chr>               <chr> <chr>    <chr> <chr>     <chr>     <chr>  <chr>  <chr> 
+ 1 2017-18 RS    Atlanta Hawks 2017-10-18 Dallas Mavericks    W     Away     No    No        No        No     No     No    
+ 2 2017-18 RS    Atlanta Hawks 2017-10-20 Charlotte Hornets   L     Away     No    No        No        No     No     No    
+ 3 2017-18 RS    Atlanta Hawks 2017-10-22 Brooklyn Nets       L     Away     Yes   Yes       No        No     No     No    
+ 4 2017-18 RS    Atlanta Hawks 2017-10-23 Miami Heat          L     Away     Yes   No        Yes       Yes    No     No    
+ 5 2017-18 RS    Atlanta Hawks 2017-10-26 Chicago Bulls       L     Away     Yes   Yes       No        No     No     No    
+ 6 2017-18 RS    Atlanta Hawks 2017-10-27 Denver Nuggets      L     Home     Yes   No        Yes       No     No     No    
+ 7 2017-18 RS    Atlanta Hawks 2017-10-29 Milwaukee Bucks     L     Home     No    No        No        Yes    No     No    
+ 8 2017-18 RS    Atlanta Hawks 2017-11-01 Philadelphia 76ers  L     Away     No    No        No        No     No     No    
+ 9 2017-18 RS    Atlanta Hawks 2017-11-03 Houston Rockets     L     Home     No    No        No        No     No     No    
+10 2017-18 RS    Atlanta Hawks 2017-11-05 Cleveland Cavaliers W     Away     Yes   Yes       No        No     No     No    
+# ... with 7,522 more rows
 ```
 
 It works at a team level and besides season, phase, date, team, location and 'W/L' it returns the following columns:
