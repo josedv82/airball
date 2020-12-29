@@ -335,6 +335,10 @@ I have also used his package previously [here](https://josedv.shinyapps.io/NBASc
 
 ## 11) Citation
 
+```{r}
+
+citation("airball")
+
 Fernandez, J. (2020). airball: Schedule & Travel Related Metrics in Basketball. R package version 0.4.0. https://github.com/josedv82/airball
 
 A BibTeX entry for LaTeX users is
@@ -345,6 +349,7 @@ A BibTeX entry for LaTeX users is
     note = {R package version 0.4.0},
     url = {https://github.com/josedv82/airball},
   }
+```
 
 ## 12) Disclaimer
 
