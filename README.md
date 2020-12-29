@@ -187,7 +187,7 @@ data %>%
 
 ### 7) Arbitrary Density Indicators
 
-The last function currently implemented is `nba_density()`. This function accepts the result of `nba_travel()` and returns a data frame with various common arbitrary game density descriptors.
+The `nba_density()` function accepts the result of `nba_travel()` and returns a data frame with various common arbitrary game density descriptors.
 
 ```{r}
 datos <- nba_travel()
@@ -203,17 +203,56 @@ It works at a team level and besides season, phase, date, team, location and 'W/
 * **4in5**: Yes if the game is the 4th game played in five days.
 * **5in7**: Yes if the game is the 5th game played in seven days.
 
+## 8) Injury List
 
-## 8) Future Development
+Users can use `nba_injuries()` to get a list of injury transactions. The function enables querying start date, end date, players and/or individual teams. The data is extracted from [Pro Sport Transactions](https://www.prosportstransactions.com/). Please check this website for information on how the transactions are listed.
+
+Example: 
+```{r}
+
+nba_injuries(start_date = "2012-01-01",
+             end_date = "2014-01-01",
+             player = "Jose Calderon",
+             team = "")
+             
+
+# A tibble: 18 x 5
+   Date       Team      Acquired        Relinquished    Notes                                 
+   <date>     <chr>     <chr>           <chr>           <chr>                                 
+ 1 2012-03-11 Raptors   ""              "Jose Calderon" placed on IL with sprained right ankle
+ 2 2012-03-17 Raptors   ""              "Jose Calderon" sprained right ankle (DNP) (F)        
+ 3 2012-03-20 Raptors   "Jose Calderon" ""              activated from IL (P)                 
+ 4 2012-04-06 Raptors   ""              "Jose Calderon" facial injury (DNP)                   
+ 5 2012-04-13 Raptors   ""              "Jose Calderon" facial injury (DNP)                   
+ 6 2012-04-15 Raptors   ""              "Jose Calderon" right eye injury (DNP)                
+ 7 2012-04-22 Raptors   ""              "Jose Calderon" right eye injury (DNP)                
+ 8 2012-04-23 Raptors   ""              "Jose Calderon" right eye injury (DNP)                
+ 9 2012-04-26 Raptors   ""              "Jose Calderon" right eye injury (DNP)                
+10 2013-02-01 Pistons   ""              "Jose Calderon" placed on IL                          
+11 2013-02-04 Pistons   "Jose Calderon" ""              activated from IL                     
+12 2013-04-03 Pistons   ""              "Jose Calderon" arm injury (DNP)                      
+13 2013-04-07 Pistons   ""              "Jose Calderon" strained right triceps (DNP)          
+14 2013-04-10 Pistons   ""              "Jose Calderon" strained right triceps (DNP)          
+15 2013-04-12 Pistons   ""              "Jose Calderon" strained right triceps (DNP)          
+16 2013-04-15 Pistons   ""              "Jose Calderon" strained right triceps (DNP)          
+17 2013-04-17 Pistons   ""              "Jose Calderon" strained right triceps (DNP)          
+18 2013-11-30 Mavericks ""              "Jose Calderon" bone bruise in right ankle (DNP)    
+
+
+```
+
+If the parameters `player` or `team` are not indicated, it will return or players and teams within the selected dates. Note that for long queries (multiple years/teams) it may take a while.
+
+## 9) Future Development
 
 **{airball}** is currently under development and it may change over time.
 
-## 9) Acknowledgment
+## 10) Acknowledgment
 
 As mentioned above, I'd like to thank Alex Bresler and his package [{nbastatR}](https://github.com/abresler/nbastatR) which I have used to query NBA schedule and box scores from the NBA stats website. 
 
 I have also used his package previously [here](https://josedv.shinyapps.io/NBASchedule/) to create an app to visualize and manipulate several NBA game density factors.
 
-## 10) Disclaimer
+## 11) Disclaimer
 
 Please be aware the metrics and calculations in this package are estimations and might not accurately represent actual travel management plans by teams.
