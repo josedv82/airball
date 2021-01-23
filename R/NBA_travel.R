@@ -54,7 +54,7 @@ nba_travel <- function(start_season = 2018,
 
 
 ## pull regular season data
-  RS <- tryCatch({
+  invisible(capture.output( RS <- tryCatch({
 
     suppressWarnings(
       nbastatR::game_logs(
@@ -82,10 +82,10 @@ nba_travel <- function(start_season = 2018,
 
   }
 
-  )
+  )))
 
 #pull play off data
-  PO <- tryCatch({
+  invisible(capture.output( PO <- tryCatch({
 
     suppressWarnings(
       nbastatR::game_logs(
@@ -113,9 +113,9 @@ nba_travel <- function(start_season = 2018,
 
   }
 
-  )
+  )))
 
-  #pull futire games (games that have not been played yet
+  #pull future games (games that have not been played yet)
 
   future_games <- function(year = 2021, month = "december"){
 
@@ -171,7 +171,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::arrange(Team, Date) %>%
     dplyr::filter(Date >= Sys.Date())
 
- 
+
 #join regular season, playoffs and future games
   statlogs <- rbind(RS, PO) %>% dplyr::arrange(dateGame)
 
@@ -232,7 +232,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::mutate(name = ifelse(Season == "2020-21" & Team == "Toronto Raptors" & Location == "H", "Tampa", name)) %>%
     dplyr::mutate(name = ifelse(Season == "2020-21" & Opponent == "Toronto Raptors" & Location == "A", "Tampa", name)) %>%
 
-    #join team with cities  
+    #join team with cities
     dplyr::full_join(cities, by = "name") %>%
     dplyr::mutate(off = paste(name, country.etc)) %>%
     dplyr::filter(off != "Dallas Canada" & off != "Houston Canada") %>%

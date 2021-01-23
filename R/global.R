@@ -111,4 +111,5 @@ utils::globalVariables(c("%>%",
                          "visitor_team_name",
                          "Rem",
                          "Acquired",
-                         "Relinquished"))
+                         "Relinquished",
+                         "capture.output"))
