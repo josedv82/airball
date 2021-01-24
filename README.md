@@ -98,7 +98,7 @@ It returns a data frame with multiple travel metrics including:
 
 ### 5) Player Metrics:
 
-To get travel and schedule metrics at a player level use:
+To get travel and schedule metrics for one or various players use:
 
 ```{r}
 
