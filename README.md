@@ -187,7 +187,7 @@ There are several common ggplot arguments users can customise to achieve the des
 
 ### 6.1) Interactive 3D Flight Plots
 
-Although outside of the scope of this package, it is worth mentioning that users can combine the results of `nba_travel()` with the plotting capabilities of [{echarts4r}](https://echarts4r.john-coene.com/) to create dynamic 3D plots of the flight paths with just a few lines of code. 
+Although outside of the scope of this package, it is worth mentioning that users can combine the results of `nba_travel()` with third party libraries, for example [{echarts4r}](https://echarts4r.john-coene.com/) to create dynamic 3D plots of the flight paths with just a few lines of code. 
 
 Below is an example of how to do this:
 
