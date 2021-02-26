@@ -1,6 +1,6 @@
 Package: airball
 Title: Schedule & Travel Related Metrics in Basketball
-Version: 0.4.2
+Version: 0.4.3
 Authors@R: person(given = "Jose", family = "Fernandez", role = c("aut", "cre"), email = "jose.fernandezdv@gmail.com")
 Maintainer: Jose Fernandez <jose.fernandezdv@gmail.com>
 Description: Quick calculations of common travel and schedule related information for Basketball teams (currently only NBA teams) and various different seasons (since 1947). The retrieved data includes distance travelled between games, time zone for each game, time shifts betwen games, number of rest days between games, estimated flight duration, etc. Plotting options enable users to visualize maps of flight paths between games. This package uses the game_logs() function from the really useful nbastatR package written by Bresler. A (2020) <https://github.com/abresler/nbastatR> to query seasonn schedule and player stats from publicly available sources.
