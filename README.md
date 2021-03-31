@@ -18,7 +18,7 @@ The motivation behind this package is to provide practitioners wishing to model 
 
 
 ***
-For example purposes, I created a game outcome predictive model using {airball} schedule data. It is available on this [google colab notebook.](https://colab.research.google.com/drive/1fTw-7JuvUWzbTD-vtc4s8l7lDwBdh8Bk?usp=sharing)
+For example purposes, I created a model to predict game outcomes using {airball} schedule data. It is available on this [google colab notebook.](https://colab.research.google.com/drive/1fTw-7JuvUWzbTD-vtc4s8l7lDwBdh8Bk?usp=sharing)
 
 ***
 
