@@ -16,6 +16,12 @@ The impact of schedule density and fixture congestion on team performance and in
 
 The motivation behind this package is to provide practitioners wishing to model schedule and travel data with tools to facilitate the extraction of several common metrics such as distance traveled, time zone changes, flight duration, routes, number of rest days, location coordinates, etc.  
 
+
+***
+I created a game outcome predictive model using {airball} data as an example. It is available on this [google colab notebook.](https://colab.research.google.com/drive/1fTw-7JuvUWzbTD-vtc4s8l7lDwBdh8Bk?usp=sharing)
+
+***
+
 The package is currently under development and only provides information for NBA teams. The goal is to expand to more leagues over time.
 
 ## 2) Installation
