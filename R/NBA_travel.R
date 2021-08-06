@@ -117,7 +117,7 @@ nba_travel <- function(start_season = 2018,
 
   #pull future games (games that have not been played yet)
 
-  future_games <- function(year = 2021, month = "december"){
+  future_games <- function(year = 2022, month = "december"){
 
     year <- year
     month <- month
@@ -155,17 +155,17 @@ nba_travel <- function(start_season = 2018,
     month_a <- month_df %>% dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>% dplyr::mutate(Location = "A")
 
     future <- dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
-      dplyr::mutate(Season = "2020-21", `W/L` = "-", Phase = "RS")
+      dplyr::mutate(Season = "2021-22", `W/L` = "-", Phase = "RS")
 
   }
 
 #join future games for all months (will need to add remaining months when schedule is announced
-  dec <- future_games(year = 2021, month = "december")
-  jan <- future_games(year = 2021, month = "january")
-  feb <- future_games(year = 2021, month = "february")
-  mar <- future_games(year = 2021, month = "march")
-  apr <- future_games(year = 2021, month = "april")
-  may <- future_games(year = 2021, month = "may")
+  dec <- future_games(year = 2022, month = "december")
+  jan <- future_games(year = 2022, month = "january")
+  feb <- future_games(year = 2022, month = "february")
+  mar <- future_games(year = 2022, month = "march")
+  apr <- future_games(year = 2022, month = "april")
+  may <- future_games(year = 2022, month = "may")
 
   future <- dplyr::full_join(dec, jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
@@ -189,7 +189,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::distinct()
 
   #conditional merging. If there are future games involved join future dataset up to current date, else just pull all previous games
-  if(end_season < 2021) {
+  if(end_season < 2022) {
 
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
@@ -365,7 +365,7 @@ nba_travel <- function(start_season = 2018,
                                                                                          ifelse(Month == 10, 'Oct',
                                                                                                 ifelse(Month == 11, 'Nov', 'Dec')))))))))))) %>%
 
-    dplyr::mutate(Notes = ifelse(Date > "2020-07-01" & Date < "2020-11-01" & `Return Home` == "Yes", "Remove", "")) %>%
+    dplyr::mutate(Notes = ifelse(Date > "2020-07-01" & Date < "2020-11-01" & `Return Home` == "Yes", "Remove", "")) %>% #for bubble
     dplyr::filter(Notes != "Remove") %>%
     dplyr::select(-Notes) %>%
     tidyr::fill(Phase, .direction = "up") %>%
