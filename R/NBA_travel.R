@@ -117,7 +117,7 @@ nba_travel <- function(start_season = 2018,
 
   #pull future games (games that have not been played yet)
 
-  future_games <- function(year = 2022, month = "october"){ #year needs to be updated to 2022
+  future_games <- function(year = 2022, month = "may"){ #year needs to be updated to 2022
 
     year <- year
     month <- month
@@ -191,7 +191,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::distinct()
 
   #conditional merging. If there are future games involved join future dataset up to current date, else just pull all previous games
-  if(end_season < 2021) { #change year when 2022 is released
+  if(end_season < 2022) { #change year when 2022 is released
 
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
