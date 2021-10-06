@@ -166,8 +166,7 @@ nba_travel <- function(start_season = 2018,
   jan <- future_games(year = 2022, month = "january")
   feb <- future_games(year = 2022, month = "february")
   mar <- future_games(year = 2022, month = "march")
-  apr <- future_games(year = 2022, month = "april")
-  may <- future_games(year = 2022, month = "may")  
+  apr <- future_games(year = 2022, month = "april")  
 
   future <- dplyr::full_join(oct, nov, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(dec, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>% 
@@ -175,7 +174,6 @@ nba_travel <- function(start_season = 2018,
     dplyr::full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(apr, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(may, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::arrange(Team, Date) %>%
     dplyr::filter(Date >= Sys.Date())
 
