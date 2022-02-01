@@ -95,7 +95,7 @@ It returns a data frame with multiple travel metrics including:
 * origin and destination city coordinates
 * etc
 
-**Note**: If you are pulling up to the current season (i.e. 2021) it will show future games that have not been played yet, allowing users to check future schedule metrics. If this is the case, it is recommended to pull the most recent season along with the previous to avoid potential download errors. So,  for example, set ```start_season = 2020``` and ```end_season = 2021``` instead of ```start_season = 2021```  
+**Note**: If you are pulling up to the current season (i.e. 2022) it will show future games that have not been played yet, allowing users to check future schedule metrics. If this is the case, it is recommended to pull the most recent season along with the previous to avoid potential download errors. So,  for example, set ```start_season = 2021``` and ```end_season = 2022``` instead of ```start_season = 2022```  
 
 ### 5) Player Metrics:
 
