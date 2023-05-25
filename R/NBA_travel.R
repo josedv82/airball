@@ -117,7 +117,7 @@ nba_travel <- function(start_season = 2018,
 
   #pull future games (games that have not been played yet)
 
-  future_games <- function(year = 2022, month = "april"){ #year needs to be updated to 2022
+  future_games <- function(year = 2023, month = "april"){ #year needs to be updated to 2022
 
     year <- year
     month <- month
@@ -155,22 +155,22 @@ nba_travel <- function(start_season = 2018,
     month_a <- month_df %>% dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>% dplyr::mutate(Location = "A")
 
     future <- dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
-      dplyr::mutate(Season = "2021-22", `W/L` = "-", Phase = "RS")
+      dplyr::mutate(Season = "2023-24", `W/L` = "-", Phase = "RS")
 
   }
 
 #join future games for all months (will need to add remaining months when schedule is announced
-  oct <- future_games(year = 2022, month = "october")
-  nov <- future_games(year = 2022, month = "november")
-  dec <- future_games(year = 2022, month = "december")
-  jan <- future_games(year = 2022, month = "january")
-  feb <- future_games(year = 2022, month = "february")
-  mar <- future_games(year = 2022, month = "march")
-  apr <- future_games(year = 2022, month = "april")  
+  oct <- future_games(year = 2023, month = "october")
+  nov <- future_games(year = 2023, month = "november")
+  dec <- future_games(year = 2023, month = "december")
+  jan <- future_games(year = 2023, month = "january")
+  feb <- future_games(year = 2023, month = "february")
+  mar <- future_games(year = 2023, month = "march")
+  apr <- future_games(year = 2023, month = "april")
 
   future <- dplyr::full_join(oct, nov, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(dec, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>% 
-    dplyr::full_join(jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%    
+    dplyr::full_join(dec, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
+    dplyr::full_join(jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
     dplyr::full_join(apr, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
@@ -191,7 +191,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::distinct()
 
   #conditional merging. If there are future games involved join future dataset up to current date, else just pull all previous games
-  if(end_season < 2022) { #change year when 2022 is released
+  if(end_season < 2023) { #change year when 2024 is released
 
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%

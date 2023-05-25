@@ -83,8 +83,8 @@ nba_injuries <- function(start_date = "2017-01-01",
 
     data %>%
       dplyr::mutate(Date = lubridate::ymd(Date)) %>%
-      dplyr::mutate(Acquired = sub("\\\u2022 ", "", Acquired)) %>%
-      dplyr::mutate(Relinquished = sub("\\\u2022 ", "", Relinquished))
+      dplyr::mutate(Acquired = sub("\\\u2024 ", "", Acquired)) %>%
+      dplyr::mutate(Relinquished = sub("\\\u2024 ", "", Relinquished))
 
   }, error = function(cond) {
     message("That query did not return any results. Try adjusting your search")
