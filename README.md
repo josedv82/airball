@@ -40,7 +40,7 @@ There are currently two functions to help extract travel and schedule related me
 * `nba_travel()`
 * `nba_player_travel()`
 
-Before explaining those two functions, I'd like to credit Alex Bresler and his package [**{nbastatR}**](https://github.com/abresler/nbastatR) as I have embedded one of the functions he wrote [`game_logs()`](https://rdrr.io/github/abresler/nbastatR/man/game_logs.html) within my code to query NBA schedule data from the [NBA Stats](https://www.nba.com/stats/players/boxscores/) website.
+*Before explaining those two functions, I'd like to credit Alex Bresler and his package [**{nbastatR}**](https://github.com/abresler/nbastatR) as I have embedded one of the functions he wrote [`game_logs()`](https://rdrr.io/github/abresler/nbastatR/man/game_logs.html) within my code to query NBA schedule data from the [NBA Stats](https://www.nba.com/stats/players/boxscores/) website.*
 
 ### 4) Team Metrics:
 
