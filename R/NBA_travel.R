@@ -352,7 +352,9 @@ nba_travel <- function(start_season = 2018,
     dplyr::filter(Rem != "1") %>% dplyr::select(-Rem)
 
   #conditional return based on whether users select a team or not
-  if(missing(team)) return(final)
-  else return(final %>% dplyr::filter(Team %in% team))
+  if(missing(team)) return(final %>% arrange(Team, desc(Date)))
+  else
+  return(final %>% dplyr::filter(Team %in% team) %>% arrange(Team, desc(Date)))
 
 }
+
