@@ -50,97 +50,79 @@ nba_travel <- function(start_season = 2018,
                        team = NULL,
                        return_home = 20,
                        phase = c("RS", "PO"),
-                       flight_speed = 550){
+                       flight_speed = 550) {
 
 
-## pull regular season data
-  invisible(capture.output( RS <- tryCatch({
 
-    suppressWarnings(
-      nbastatR::game_logs(
-        seasons = start_season:end_season,
-        league = "NBA",
-        result_types = "player",
-        season_types = "Regular Season",
-        nest_data = F,
-        assign_to_environment = F,
-        return_message = F
-      )) %>% dplyr::mutate(Phase = "RS")
 
-  }, error = function(cond){
+  # Increase connection buffer size to avoid vroom errors
+  Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
 
-    suppressWarnings(
-      nbastatR::game_logs(
-        seasons = start_season:(end_season-1),
-        league = "NBA",
-        result_types = "player",
-        season_types = "Regular Season",
-        nest_data = F,
-        assign_to_environment = F,
-        return_message = F
-      )) %>% dplyr::mutate(Phase = "RS")
+  # Pull regular season data
+  RS <- suppressWarnings(tryCatch({
+    nbastatR::game_logs(
+      seasons = start_season:end_season,
+      league = "NBA",
+      result_types = "player",
+      season_types = "Regular Season",
+      nest_data = FALSE,
+      assign_to_environment = FALSE,
+      return_message = FALSE
+    ) %>% dplyr::mutate(Phase = "RS")
+  }, error = function(cond) {
+    nbastatR::game_logs(
+      seasons = start_season:(end_season - 1),
+      league = "NBA",
+      result_types = "player",
+      season_types = "Regular Season",
+      nest_data = FALSE,
+      assign_to_environment = FALSE,
+      return_message = FALSE
+    ) %>% dplyr::mutate(Phase = "RS")
+  }))
 
-  }
+  # Pull playoff data
+  PO <- suppressWarnings(tryCatch({
+    nbastatR::game_logs(
+      seasons = start_season:end_season,
+      league = "NBA",
+      result_types = "player",
+      season_types = "Playoffs",
+      nest_data = FALSE,
+      assign_to_environment = FALSE,
+      return_message = FALSE
+    ) %>% dplyr::mutate(Phase = "PO")
+  }, error = function(cond) {
+    nbastatR::game_logs(
+      seasons = start_season:(end_season - 1),
+      league = "NBA",
+      result_types = "player",
+      season_types = "Playoffs",
+      nest_data = FALSE,
+      assign_to_environment = FALSE,
+      return_message = FALSE
+    ) %>% dplyr::mutate(Phase = "PO")
+  }))
 
-  )))
-
-#pull play off data
-  invisible(capture.output( PO <- tryCatch({
-
-    suppressWarnings(
-      nbastatR::game_logs(
-        seasons = start_season:end_season,
-        league = "NBA",
-        result_types = "player",
-        season_types = "Playoffs",
-        nest_data = F,
-        assign_to_environment = F,
-        return_message = F
-      )) %>% dplyr::mutate(Phase = "PO")
-
-  }, error = function(cond){
-
-    suppressWarnings(
-      nbastatR::game_logs(
-        seasons = start_season:(end_season-1),
-        league = "NBA",
-        result_types = "player",
-        season_types = "Playoffs",
-        nest_data = F,
-        assign_to_environment = F,
-        return_message = F
-      )) %>% dplyr::mutate(Phase = "PO")
-
-  }
-
-  )))
-
-  #pull future games (games that have not been played yet)
-
-  future_games <- function(year = 2023, month = "april"){ #year needs to be updated to 2022
-
-    year <- year
-    month <- month
-    url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, "_games-", month, ".html")
+  # Automate future games retrieval based on current year and month
+  future_games <- function(year = as.numeric(format(Sys.Date(), "%Y")), month = format(Sys.Date(), "%B")) {
+    url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, "_games-", tolower(month), ".html")
     webpage <- xml2::read_html(url)
-
 
     col_names <- webpage %>%
       rvest::html_nodes("table#schedule > thead > tr > th") %>%
       rvest::html_attr("data-stat")
-    col_names <- c("game_id", col_names)
-
+    col_names <- make.unique(c("game_id", col_names))
 
     dates <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > th") %>%
-      rvest::html_text()
-    dates <- dates[dates != "Playoffs"]
+      rvest::html_text() %>%
+      .[. != "Playoffs"]
 
     game_id <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > th") %>%
-      rvest::html_attr("csk")
-    game_id <- game_id[!is.na(game_id)]
-
+      rvest::html_attr("csk") %>%
+      .[!is.na(.)]
 
     data <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > td") %>%
@@ -151,37 +133,30 @@ nba_travel <- function(start_season = 2018,
       dplyr::mutate(dates = lubridate::mdy(dates))
     names(month_df) <- col_names
 
+    # Determine start year of season based on the month
+    start_year <- if (month %in% c("october", "november", "december")) year else year - 1
+    season_label <- paste0(start_year, "-", (start_year + 1) %% 100)
+
     month_h <- month_df %>% dplyr::select(Date = date_game, Team = home_team_name, Opponent = visitor_team_name) %>% dplyr::mutate(Location = "H")
     month_a <- month_df %>% dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>% dplyr::mutate(Location = "A")
 
-    future <- dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
-      dplyr::mutate(Season = "2023-24", `W/L` = "-", Phase = "RS")
-
+    dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
+      dplyr::mutate(Season = season_label, `W/L` = "-", Phase = "RS")
   }
 
-#join future games for all months (will need to add remaining months when schedule is announced
-  oct <- future_games(year = 2023, month = "october")
-  nov <- future_games(year = 2023, month = "november")
-  dec <- future_games(year = 2023, month = "december")
-  jan <- future_games(year = 2023, month = "january")
-  feb <- future_games(year = 2023, month = "february")
-  mar <- future_games(year = 2023, month = "march")
-  apr <- future_games(year = 2023, month = "april")
+  # Pull future games for all months in the current NBA season
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
+  months <- c("october", "november", "december", "january", "february", "march", "april")
+  future <- purrr::map_df(months, ~ future_games(current_year, .))
 
-  future <- dplyr::full_join(oct, nov, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(dec, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(jan, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(feb, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(mar, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::full_join(apr, by = c("Date", "Team", "Opponent", "Location", "Season", "W/L", "Phase")) %>%
-    dplyr::arrange(Team, Date) %>%
-    dplyr::filter(Date >= Sys.Date())
+  # Only include future games if they are in the next season (end_season + 1)
+  future <- future %>%
+    dplyr::filter(as.numeric(substr(Season, 1, 4)) > end_season)
 
+  # Join RS, PO, and filtered future games
+  statlogs <- dplyr::bind_rows(RS, PO) %>% dplyr::arrange(dateGame)
 
-#join regular season, playoffs and future games
-  statlogs <- rbind(RS, PO) %>% dplyr::arrange(dateGame)
-
-  #cleaning for away + home games
+  # Cleaning for away + home games
   away <- statlogs %>%
     dplyr::select(Season = slugSeason, Date = dateGame, Team = nameTeam, Location = locationGame, Opp = slugOpponent, TE = slugTeam, `W/L` = outcomeGame, Phase) %>%
     dplyr::distinct()
@@ -190,20 +165,18 @@ nba_travel <- function(start_season = 2018,
     dplyr::select(Season = slugSeason, Date = dateGame, TeamB = nameTeam, LocationB = locationGame, TE = slugOpponent, Opp = slugTeam) %>%
     dplyr::distinct()
 
-  #conditional merging. If there are future games involved join future dataset up to current date, else just pull all previous games
-  if(end_season < 2023) { #change year when 2024 is released
-
+  # Conditional merging. If there are future games, join future dataset; otherwise, use historical data
+  if (end_season < current_year) {
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
       dplyr::arrange(Team, Date)
-
   } else {
-
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
       dplyr::full_join(future, by = c("Season", "Date", "Team", "Opponent", "Location", "W/L", "Phase")) %>%
-      dplyr::arrange(Team, Date)
-
+      dplyr::arrange(Team, Date) %>%
+      # Remove duplicate rows based on Date, Team, and Opponent
+      dplyr::distinct(Date, Team, Opponent, .keep_all = TRUE)
   }
 
   #obtain city coordinates
@@ -383,4 +356,3 @@ nba_travel <- function(start_season = 2018,
   else return(final %>% dplyr::filter(Team %in% team))
 
 }
-
