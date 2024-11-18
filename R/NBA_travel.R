@@ -3,7 +3,7 @@
 #' Returns a dataframe with computed travel and schedule metrics for NBA teams. It requires the game_logs() function from on the nbastatR package written by Bresler, A (2020) <https://github.com/abresler/nbastatR> to query season schedule information that is needed to calculate travel metrics.
 #'
 #' @param start_season Numeric. The year of the first season users wish to explore (i.e. 2018)
-#' @param end_season Numeric. The year of the final season users wisth to explore (i.e. 2020)
+#' @param end_season Numeric. The year of the final season users wish to explore (i.e. 2020)
 #' @param team Character String. The name of the team to be explored. If empty it defaults to all teams within the selected seasons.
 #' @param return_home Numeric. Users can set the number of days after which the team will return home between consecutive road games. It defaults to 20 if not indicated.
 #' @param phase Character String. The phase of the season users wish to download. RS for Regular Season and PO for Playoffs. It defauls to both if not indicated.
@@ -42,6 +42,7 @@
 #'            team = c("Los Angeles Lakers", "Boston Celtics"),
 #'            return_home = 3,
 #'            phase = "RS",
+#             future_games = "yes",
 #'            flight_speed = 550)
 #'
 
@@ -52,11 +53,9 @@ nba_travel <- function(start_season = 2018,
                        phase = c("RS", "PO"),
                        flight_speed = 550) {
 
-
-
-
   # Increase connection buffer size to avoid vroom errors
   Sys.setenv("VROOM_CONNECTION_SIZE" = 131072 * 2)
+
 
   # Pull regular season data
   RS <- suppressWarnings(tryCatch({
@@ -104,54 +103,86 @@ nba_travel <- function(start_season = 2018,
     ) %>% dplyr::mutate(Phase = "PO")
   }))
 
-  # Automate future games retrieval based on current year and month
-  future_games <- function(year = as.numeric(format(Sys.Date(), "%Y")), month = format(Sys.Date(), "%B")) {
-    url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, "_games-", tolower(month), ".html")
+
+
+  future_games <- function(year = as.numeric(format(Sys.Date(), "%Y")),
+                           month = tolower(format(Sys.Date(), "%B"))) {
+
+
+    # Construct URL
+    url <- paste0("https://www.basketball-reference.com/leagues/NBA_", year, "_games-", month, ".html")
+
+
+    # Open a connection
+    con <- url(url)
+
+    # Ensure the connection is closed, even if an error occurs
+    on.exit(close(con))
+
+    # Scrape webpage
     webpage <- xml2::read_html(url)
 
+    # Extract column names
     col_names <- webpage %>%
       rvest::html_nodes("table#schedule > thead > tr > th") %>%
       rvest::html_attr("data-stat")
     col_names <- make.unique(c("game_id", col_names))
 
+    # Extract dates
     dates <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > th") %>%
       rvest::html_text() %>%
       .[. != "Playoffs"]
 
+    # Extract game IDs
     game_id <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > th") %>%
       rvest::html_attr("csk") %>%
       .[!is.na(.)]
 
+    # Extract game data
     data <- webpage %>%
       rvest::html_nodes("table#schedule > tbody > tr > td") %>%
       rvest::html_text() %>%
       matrix(ncol = length(col_names) - 2, byrow = TRUE)
 
+    # Create data frame
     month_df <- as.data.frame(cbind(game_id, dates, data), stringsAsFactors = FALSE) %>%
       dplyr::mutate(dates = lubridate::mdy(dates))
     names(month_df) <- col_names
 
-    # Determine start year of season based on the month
-    start_year <- if (month %in% c("october", "november", "december")) year else year - 1
-    season_label <- paste0(start_year, "-", (start_year + 1) %% 100)
+    # Create season label
+    season_label <- paste0(season_year , "-", sprintf("%02d", (season_year + 1) %% 100))
 
-    month_h <- month_df %>% dplyr::select(Date = date_game, Team = home_team_name, Opponent = visitor_team_name) %>% dplyr::mutate(Location = "H")
-    month_a <- month_df %>% dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>% dplyr::mutate(Location = "A")
+    # Create home and away datasets
+    month_h <- month_df %>%
+      dplyr::select(Date = date_game, Team = home_team_name, Opponent = visitor_team_name) %>%
+      dplyr::mutate(Location = "H")
+    month_a <- month_df %>%
+      dplyr::select(Date = date_game, Opponent = home_team_name, Team = visitor_team_name) %>%
+      dplyr::mutate(Location = "A")
 
+    # Combine datasets
     dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
       dplyr::mutate(Season = season_label, `W/L` = "-", Phase = "RS")
   }
 
-  # Pull future games for all months in the current NBA season
-  current_year <- as.numeric(format(Sys.Date(), "%Y"))
-  months <- c("october", "november", "december", "january", "february", "march", "april")
-  future <- purrr::map_df(months, ~ future_games(current_year, .))
 
-  # Only include future games if they are in the next season (end_season + 1)
-  future <- future %>%
-    dplyr::filter(as.numeric(substr(Season, 1, 4)) > end_season)
+
+  # Define the NBA season months
+  months <- c("october", "november", "december", "january", "february", "march", "april")
+
+  # Determine the base year
+  current_year <- as.numeric(format(Sys.Date(), "%Y"))
+
+  # Create a corresponding vector of years
+  years <- ifelse(months %in% c("january", "february", "march", "april"), current_year + 1, current_year + 1)
+
+  # Use purrr::map2_df to pass the correct year and month
+  future <- purrr::map2_df(years, months, ~ future_games(year = .x, month = .y))
+
+
+
 
   # Join RS, PO, and filtered future games
   statlogs <- dplyr::bind_rows(RS, PO) %>% dplyr::arrange(dateGame)
@@ -178,6 +209,7 @@ nba_travel <- function(start_season = 2018,
       # Remove duplicate rows based on Date, Team, and Opponent
       dplyr::distinct(Date, Team, Opponent, .keep_all = TRUE)
   }
+
 
   #obtain city coordinates
   cities <- maps::world.cities %>%
@@ -220,7 +252,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::group_by(Team, Season) %>%
     dplyr::mutate(destLat = dplyr::lag(lat), destLon = dplyr::lag(long))
 
-   #cleaning home cities
+  #cleaning home cities
   calhome <- cal1 %>%
     dplyr::filter(Location == "H") %>%
     dplyr::ungroup() %>%
@@ -241,7 +273,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::mutate(Rest = ifelse(is.na(Rest), 15, Rest)) %>%
     dplyr::mutate(AB = paste(Location, dplyr::lag(Location)))
 
- #completes missing date sequence
+  #completes missing date sequence
   miscal <-  allcal %>%
     dplyr::group_by(Season, Team) %>%
     tidyr::complete(Date = seq.Date(min(Date), max(Date), by = "day")) %>%
@@ -303,7 +335,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::select(offset = utc_offset_h, everything()) %>%
     dplyr::ungroup()
 
-#create final data set with all parameters
+  #create final data set with all parameters
   final <- shift %>%
     dplyr::filter(Location == "Home") %>%
     dplyr::select(Team, City, TZ) %>%
@@ -351,10 +383,11 @@ nba_travel <- function(start_season = 2018,
     dplyr::mutate(Rem = ifelse(!is.na(dplyr::lag(Date)) & dplyr::lag(Date) == Date, "1", "")) %>%
     dplyr::filter(Rem != "1") %>% dplyr::select(-Rem)
 
+
+
   #conditional return based on whether users select a team or not
   if(missing(team)) return(final %>% arrange(Team, desc(Date)))
   else
-  return(final %>% dplyr::filter(Team %in% team) %>% arrange(Team, desc(Date)))
+    return(final %>% dplyr::filter(Team %in% team) %>% arrange(Team, desc(Date)))
 
 }
-
