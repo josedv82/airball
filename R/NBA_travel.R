@@ -105,7 +105,38 @@ nba_travel <- function(start_season = 2018,
 
 
 
-  future_games <- function(year = as.numeric(format(Sys.Date(), "%Y")),
+  ## extract current season for future games
+
+  # Get the current date
+  current_date <- Sys.Date()
+
+  # Extract the current year and month
+  current_year <- as.integer(format(current_date, "%Y"))
+  current_month <- as.integer(format(current_date, "%m"))
+
+  # Determine the NBA season based on the current date
+  if (current_month >= 10) {
+    # If the current month is October (10) or later, the season spans the current year to the next year
+    season_start_year <- current_year
+    season_end_year <- current_year + 1
+  } else {
+    # If the current month is before October, the season spans the previous year to the current year
+    season_start_year <- current_year - 1
+    season_end_year <- current_year
+  }
+
+  # Format the season as "YYYY-YY"
+  nba_season <- paste0(season_start_year, "-", substr(season_end_year, 3, 4))
+
+
+  # Extract the ending year
+  end_year_suffix <- as.integer(substring(nba_season, 6, 7))
+  end_year <- ifelse(end_year_suffix < 50, 2000 + end_year_suffix, 1900 + end_year_suffix)
+
+
+
+
+  future_games <- function(year = as.numeric(end_year),
                            month = tolower(format(Sys.Date(), "%B"))) {
 
 
@@ -151,8 +182,6 @@ nba_travel <- function(start_season = 2018,
       dplyr::mutate(dates = lubridate::mdy(dates))
     names(month_df) <- col_names
 
-    # Create season label
-    season_label <- paste0(season_year , "-", sprintf("%02d", (season_year + 1) %% 100))
 
     # Create home and away datasets
     month_h <- month_df %>%
@@ -164,23 +193,16 @@ nba_travel <- function(start_season = 2018,
 
     # Combine datasets
     dplyr::full_join(month_h, month_a, by = c("Date", "Team", "Opponent", "Location")) %>%
-      dplyr::mutate(Season = season_label, `W/L` = "-", Phase = "RS")
-  }
+      dplyr::mutate(Season = nba_season, `W/L` = "-", Phase = "RS")
 
+  }
 
 
   # Define the NBA season months
   months <- c("october", "november", "december", "january", "february", "march", "april")
 
-  # Determine the base year
-  current_year <- as.numeric(format(Sys.Date(), "%Y"))
-
-  # Create a corresponding vector of years
-  years <- ifelse(months %in% c("january", "february", "march", "april"), current_year + 1, current_year + 1)
-
   # Use purrr::map2_df to pass the correct year and month
-  future <- purrr::map2_df(years, months, ~ future_games(year = .x, month = .y))
-
+  future <- purrr::map2_df(end_year, months, ~ future_games(year = .x, month = .y))
 
 
 
@@ -197,7 +219,7 @@ nba_travel <- function(start_season = 2018,
     dplyr::distinct()
 
   # Conditional merging. If there are future games, join future dataset; otherwise, use historical data
-  if (end_season < current_year) {
+  if (end_season < end_year) {
     cal <- dplyr::full_join(away, home, by = c("Season", "Date", "Opp", "TE")) %>%
       dplyr::select(Season, Date, Team, Opponent = TeamB, Location, `W/L`, Phase, -Opp, -TE, -LocationB) %>%
       dplyr::arrange(Team, Date)
