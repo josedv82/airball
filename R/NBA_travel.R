@@ -408,8 +408,8 @@ nba_travel <- function(start_season = 2018,
 
 
   #conditional return based on whether users select a team or not
-  if(missing(team)) return(final %>% arrange(Team, desc(Date)))
+  if(missing(team)) return(final %>% dplyr::arrange(Team, desc(Date)))
   else
-    return(final %>% dplyr::filter(Team %in% team) %>% arrange(Team, desc(Date)))
+    return(final %>% dplyr::filter(Team %in% team) %>% dplyr::arrange(Team, desc(Date)))
 
 }
